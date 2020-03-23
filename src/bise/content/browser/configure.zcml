@@ -18,4 +18,25 @@
       directory="static"
       />
 
+  <!-- <plone:service -->
+  <!--   method="GET" -->
+  <!--   for="*" -->
+  <!--   factory=".api.FactsheetDatabaseListing" -->
+  <!--   name="@factsheet&#45;database&#45;listing" -->
+  <!--   permission="zope2.View" -->
+  <!--   /> -->
+
+  <adapter factory=".api.FactsheetDatabaseListing" name="factsheet-database-listing"/>
+
+  <include package="plone.app.contentmenu" />
+
+  <browser:page
+    name="factsheet_database_listing_view"
+    title="Factsheets database listing"
+    menu="plone_displayviews"
+    for="*"
+    template="pt/factsheet_database_listing_view.pt"
+    permission="zope2.View"
+    />
+
 </configure>

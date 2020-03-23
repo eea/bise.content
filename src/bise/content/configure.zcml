@@ -42,4 +42,6 @@
 
   <!-- -*- extra stuff goes here -*- -->
 
+  <interface interface=".interfaces.IBiseFactsheetDatabase" />
+
 </configure>
