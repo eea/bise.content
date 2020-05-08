@@ -2,20 +2,24 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:plone="http://namespaces.plone.org/plone"
-    i18n_domain="bise.content">
+    i18n_domain="bise.content"
+    >
 
   <!-- Set overrides folder for Just-a-Bunch-Of-Templates product -->
-  <include package="z3c.jbot" file="meta.zcml" />
+  <include
+      package="z3c.jbot"
+      file="meta.zcml"
+      />
   <browser:jbot
-      directory="overrides"
       layer="bise.content.interfaces.IBiseContentLayer"
+      directory="overrides"
       />
 
   <!-- Publish static files -->
   <plone:static
       name="bise.content"
-      type="plone"
       directory="static"
+      type="plone"
       />
 
   <!-- <plone:service -->
@@ -26,17 +30,29 @@
   <!--   permission="zope2.View" -->
   <!--   /> -->
 
-  <adapter factory=".api.FactsheetDatabaseListing" name="factsheet-database-listing"/>
+  <adapter
+      name="factsheet-database-listing"
+      factory=".api.FactsheetDatabaseListing"
+      />
 
   <include package="plone.app.contentmenu" />
 
   <browser:page
-    name="factsheet_database_listing_view"
-    title="Factsheets database listing"
-    menu="plone_displayviews"
-    for="*"
-    template="pt/factsheet_database_listing_view.pt"
-    permission="zope2.View"
-    />
+      name="factsheet_database_listing_view"
+      title="Factsheets database listing"
+      for="*"
+      permission="zope2.View"
+      template="pt/factsheet_database_listing_view.pt"
+      menu="plone_displayviews"
+      />
+
+  <browser:page
+      name="toc_nav_view"
+      title="TOC Nav View"
+      for="*"
+      permission="zope2.View"
+      template="pt/factsheet_database_listing_view.pt"
+      menu="plone_displayviews"
+      />
 
 </configure>
