@@ -22,14 +22,6 @@
       type="plone"
       />
 
-  <!-- <plone:service -->
-  <!--   method="GET" -->
-  <!--   for="*" -->
-  <!--   factory=".api.FactsheetDatabaseListing" -->
-  <!--   name="@factsheet&#45;database&#45;listing" -->
-  <!--   permission="zope2.View" -->
-  <!--   /> -->
-
   <adapter
       name="factsheet-database-listing"
       factory=".api.FactsheetDatabaseListing"
@@ -54,5 +46,13 @@
       template="pt/factsheet_database_listing_view.pt"
       menu="plone_displayviews"
       />
+
+  <!-- <plone:service -->
+  <!--   method="GET" -->
+  <!--   for="*" -->
+  <!--   factory=".api.FactsheetDatabaseListing" -->
+  <!--   name="@factsheet&#45;database&#45;listing" -->
+  <!--   permission="zope2.View" -->
+  <!--   /> -->
 
 </configure>
