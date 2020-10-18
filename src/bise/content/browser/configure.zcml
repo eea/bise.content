@@ -59,4 +59,8 @@
     provides="plone.restapi.interfaces.IBlockFieldSerializationTransformer"
     factory=".blocks.ConnectedPlotlyChartSerializationTransformer" />
 
+  <subscriber
+    provides="plone.restapi.interfaces.IBlockFieldSerializationTransformer"
+    factory=".blocks.ImageCardsSerializationTransformer" />
+
 </configure>
