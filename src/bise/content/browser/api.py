@@ -1,19 +1,28 @@
+# -*- coding: utf-8 -*-
+
 """ plone.restapi extensions and endpoints
 """
 
-# from plone.restapi.services import Service
 from bise.content.interfaces import IBiseFactsheetDatabase
+from collections import deque
 from plone import api
-# -*- coding: utf-8 -*-
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zope.component import adapter
 from zope.component import getMultiAdapter
-from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
+
+import json
+import logging
+
+
+# from plone.restapi.services import Service
+# from zope.component import queryMultiAdapter
+
+logger = logging.getLogger('bise.content')
 
 
 @implementer(IExpandableElement)
@@ -65,6 +74,15 @@ class BlockData(Service):
             return self.reply_block()
 
         blocks = self.context.blocks
+
+        if isinstance(blocks, str):
+            try:
+                blocks = json.loads(blocks)
+            except:
+                logger.exception("Invalid json in blocks %s",
+                                 self.context.absolute_url())
+                blocks = {}
+
         return {
             '@id': '{}/@blocks'.format(self.context.absolute_url()),
             'items': [
@@ -73,10 +91,48 @@ class BlockData(Service):
             ]
         }
 
+    def _subforms(self, value):
+        if not value:
+            return []
+
+        if 'data' in value:
+            return self._subforms(value['data'])
+
+        if 'blocks' in value:
+            return value['blocks'].items()
+
+        return []
+
+    def find_block(self, blocks, searchid):
+        """ Crawls tree of blocks (with columns, subblocks) to find a block
+        """
+        if searchid in blocks:
+            return blocks[searchid]
+
+        initial = blocks.items()
+        stack = deque(initial)
+        while stack:
+            blockid, value = stack.pop()
+            if blockid == searchid:
+                return value
+
+            children = self._subforms(value)
+            stack.extend(children)
+
     def reply_block(self):
         blocks = self.context.blocks
+        if isinstance(blocks, str):
+            try:
+                blocks = json.loads(blocks)
+            except:
+                logger.exception("Invalid json in blocks %s",
+                                 self.context.absolute_url())
+                blocks = {}
+
+        data = self.find_block(blocks, self.blockid) or {}
+
         return {
             '@id': '{}/@blocks/{}'.format(self.context.absolute_url(),
                                           self.blockid),
-            'data': blocks.get(self.blockid, {})
+            'data': data
         }

@@ -40,6 +40,8 @@ class ImageCardsSerializationTransformer(object):
         return card
 
     def __call__(self, block_value):
+        import pdb
+        pdb.set_trace()
         if (block_value.get('cards')):
             block_value['cards'] = [
                 self.fix_links(card) for card in block_value['cards']
