@@ -47,12 +47,16 @@
       menu="plone_displayviews"
       />
 
-  <!-- <plone:service -->
-  <!--   method="GET" -->
-  <!--   for="*" -->
-  <!--   factory=".api.FactsheetDatabaseListing" -->
-  <!--   name="@factsheet&#45;database&#45;listing" -->
-  <!--   permission="zope2.View" -->
-  <!--   /> -->
+  <plone:service
+    method="GET"
+    for="*"
+    factory=".api.BlockData"
+    name="@blocks"
+    permission="zope2.View"
+    />
+
+  <subscriber
+    provides="plone.restapi.interfaces.IBlockFieldSerializationTransformer"
+    factory=".blocks.ConnectedPlotlyChartSerializationTransformer" />
 
 </configure>
