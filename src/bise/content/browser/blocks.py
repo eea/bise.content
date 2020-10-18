@@ -2,18 +2,20 @@
 """
 
 
-from plone.restapi.behaviors import IBlocks
+# from plone.restapi.behaviors import IBlocks
 from plone.restapi.interfaces import IBlockFieldSerializationTransformer
 from urllib.parse import urlparse
 from zope.component import adapter
+from zope.component import subscribers
 from zope.interface import implementer
+from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 @implementer(IBlockFieldSerializationTransformer)
-@adapter(IBlocks, IBrowserRequest)
+@adapter(Interface, IBrowserRequest)
 class ConnectedPlotlyChartSerializationTransformer(object):
-    order = -1
+    order = 100
     block_type = 'connected_plotly_chart'
 
     def __init__(self, context, request):
@@ -21,14 +23,16 @@ class ConnectedPlotlyChartSerializationTransformer(object):
         self.request = request
 
     def __call__(self, block_value):
+        if 'chartData' in block_value['chartData']:     # BBB
+            del block_value['chartData']['chartData']
         block_value['chartData']['data'] = []
         return block_value
 
 
 @implementer(IBlockFieldSerializationTransformer)
-@adapter(IBlocks, IBrowserRequest)
+@adapter(Interface, IBrowserRequest)
 class ImageCardsSerializationTransformer(object):
-    order = -1
+    order = 1
     block_type = 'imagecards'
 
     def __init__(self, context, request):
@@ -40,10 +44,53 @@ class ImageCardsSerializationTransformer(object):
         return card
 
     def __call__(self, block_value):
-        import pdb
-        pdb.set_trace()
         if (block_value.get('cards')):
             block_value['cards'] = [
                 self.fix_links(card) for card in block_value['cards']
             ]
+        return block_value
+
+
+@implementer(IBlockFieldSerializationTransformer)
+@adapter(Interface, IBrowserRequest)
+class SubformsSerializationTransformer(object):
+    order = -100      # this should to be executed as first as possible
+    block_type = None
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def _transform(self, blocks):
+        for id, block_value in blocks.items():
+            block_type = block_value.get("@type", "")
+            handlers = []
+            for h in subscribers(
+                (self.context, self.request),
+                IBlockFieldSerializationTransformer
+            ):
+                if h.block_type == block_type or h.block_type is None:
+                    handlers.append(h)
+
+            for handler in sorted(handlers, key=lambda h: h.order):
+                block_value = handler(block_value)
+
+            blocks[id] = block_value
+
+        return blocks
+
+    def __call__(self, block_value):
+        if not isinstance(block_value, dict):
+            return block_value
+
+        if 'data' in block_value:
+            if isinstance(block_value['data'], dict):
+                if 'blocks' in block_value['data']:
+                    block_value['data']['blocks'] = self._transform(
+                        block_value['data']['blocks']
+                    )
+
+        if 'blocks' in block_value:
+            block_value['blocks'] = self._transform(block_value['blocks'])
+
         return block_value
