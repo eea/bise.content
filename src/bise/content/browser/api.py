@@ -3,11 +3,12 @@
 """ plone.restapi extensions and endpoints
 """
 
+from .utils import find_block
 from bise.content.interfaces import IBiseFactsheetDatabase
-from collections import deque
 from plone import api
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.serializer.blocks import uid_to_url
 from plone.restapi.services import Service
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -65,6 +66,12 @@ class BlockData(Service):
 
     blockid = None
 
+    def transform(self, blockid, value):
+        for field in ["url", "href"]:
+            if field in value.keys():
+                value[field] = uid_to_url(value.get(field, ""))
+        return value
+
     def publishTraverse(self, request, blockid):
         self.blockid = blockid
         return self
@@ -86,38 +93,10 @@ class BlockData(Service):
         return {
             '@id': '{}/@blocks'.format(self.context.absolute_url()),
             'items': [
-                [blockid, blocks[blockid]] for blockid in
-                (self.context.blocks_layout.items or [])
+                [blockid, self.transform(blockid, blocks[blockid])]
+                for blockid in (self.context.blocks_layout.items or [])
             ]
         }
-
-    def _subforms(self, value):
-        if not value:
-            return []
-
-        if 'data' in value:
-            return self._subforms(value['data'])
-
-        if 'blocks' in value:
-            return value['blocks'].items()
-
-        return []
-
-    def find_block(self, blocks, searchid):
-        """ Crawls tree of blocks (with columns, subblocks) to find a block
-        """
-        if searchid in blocks:
-            return blocks[searchid]
-
-        initial = blocks.items()
-        stack = deque(initial)
-        while stack:
-            blockid, value = stack.pop()
-            if blockid == searchid:
-                return value
-
-            children = self._subforms(value)
-            stack.extend(children)
 
     def reply_block(self):
         blocks = self.context.blocks
@@ -129,10 +108,10 @@ class BlockData(Service):
                                  self.context.absolute_url())
                 blocks = {}
 
-        data = self.find_block(blocks, self.blockid) or {}
+        data = find_block(blocks, self.blockid) or {}
 
         return {
             '@id': '{}/@blocks/{}'.format(self.context.absolute_url(),
                                           self.blockid),
-            'data': data
+            'data': self.transform(self.blockid, data)
         }

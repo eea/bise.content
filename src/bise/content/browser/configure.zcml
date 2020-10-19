@@ -67,4 +67,12 @@
     provides="plone.restapi.interfaces.IBlockFieldSerializationTransformer"
     factory=".blocks.SubformsSerializationTransformer" />
 
+  <subscriber
+    provides="plone.restapi.interfaces.IBlockFieldDeserializationTransformer"
+    factory=".blocks.SubformsDeserializationTransformer" />
+
+  <subscriber
+    provides="plone.restapi.interfaces.IBlockFieldDeserializationTransformer"
+    factory=".blocks.ConnectedPlotyChartDeserializationTransformer" />
+
 </configure>

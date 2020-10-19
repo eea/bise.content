@@ -2,7 +2,8 @@
 """
 
 
-# from plone.restapi.behaviors import IBlocks
+from .utils import find_block
+from plone.restapi.interfaces import IBlockFieldDeserializationTransformer
 from plone.restapi.interfaces import IBlockFieldSerializationTransformer
 from urllib.parse import urlparse
 from zope.component import adapter
@@ -10,6 +11,9 @@ from zope.component import subscribers
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
+
+
+# from plone.restapi.behaviors import IBlocks
 
 
 @implementer(IBlockFieldSerializationTransformer)
@@ -25,7 +29,34 @@ class ConnectedPlotlyChartSerializationTransformer(object):
     def __call__(self, block_value):
         if 'chartData' in block_value['chartData']:     # BBB
             del block_value['chartData']['chartData']
+        print('serialization')
+        print(block_value)
         block_value['chartData']['data'] = []
+        if block_value['chartData'].get('provider_url'):
+            url = block_value['chartData']['provider_url']
+            block_value['chartData']['provider_url'] = urlparse(url).path
+        return block_value
+
+
+@implementer(IBlockFieldDeserializationTransformer)
+@adapter(Interface, IBrowserRequest)
+class ConnectedPlotyChartDeserializationTransformer(object):
+    order = 100
+    block_type = 'connected_plotly_chart'
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def __call__(self, block_value):
+        if not block_value['chartData'].get('data'):
+            block = find_block(self.context.blocks, self.blockid)
+            block_value['chartData']['data'] = block['chartData'].get(
+                'data', [])
+
+            print('fixed blockvalue')
+            print(block_value)
+
         return block_value
 
 
@@ -51,11 +82,10 @@ class ImageCardsSerializationTransformer(object):
         return block_value
 
 
-@implementer(IBlockFieldSerializationTransformer)
-@adapter(Interface, IBrowserRequest)
-class SubformsSerializationTransformer(object):
+class SubformsTransformer(object):
     order = -100      # this should to be executed as first as possible
     block_type = None
+    iface = None
 
     def __init__(self, context, request):
         self.context = context
@@ -67,9 +97,10 @@ class SubformsSerializationTransformer(object):
             handlers = []
             for h in subscribers(
                 (self.context, self.request),
-                IBlockFieldSerializationTransformer
+                self.iface
             ):
                 if h.block_type == block_type or h.block_type is None:
+                    h.blockid = id
                     handlers.append(h)
 
             for handler in sorted(handlers, key=lambda h: h.order):
@@ -94,3 +125,15 @@ class SubformsSerializationTransformer(object):
             block_value['blocks'] = self._transform(block_value['blocks'])
 
         return block_value
+
+
+@implementer(IBlockFieldSerializationTransformer)
+@adapter(Interface, IBrowserRequest)
+class SubformsSerializationTransformer(SubformsTransformer):
+    iface = IBlockFieldSerializationTransformer
+
+
+@implementer(IBlockFieldSerializationTransformer)
+@adapter(Interface, IBrowserRequest)
+class SubformsDeserializationTransformer(SubformsTransformer):
+    iface = IBlockFieldDeserializationTransformer
