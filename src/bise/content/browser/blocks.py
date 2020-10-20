@@ -51,11 +51,12 @@ class ConnectedPlotyChartDeserializationTransformer(object):
     def __call__(self, block_value):
         if not block_value['chartData'].get('data'):
             block = find_block(self.context.blocks, self.blockid)
-            block_value['chartData']['data'] = block['chartData'].get(
-                'data', [])
+            if block:
+                block_value['chartData']['data'] = block['chartData'].get(
+                    'data', [])
 
-            print('fixed blockvalue')
-            print(block_value)
+            # print('fixed blockvalue')
+            # print(block_value)
 
         return block_value
 
