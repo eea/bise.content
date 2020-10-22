@@ -68,7 +68,14 @@ class BlockData(Service):
     blockid = None
 
     def url_to_path(self, url):
-        return urlparse(url.replace('@@download/file', '')).path
+        # portal_url = api.portal.get().absolute_url()
+        path = urlparse(url).path.replace('/@@download/file', '')
+        bits = list(filter(None, path.split('/')))
+        if bits[0] == 'bise' or bits[0] == 'api':
+            bits = bits[1:]
+        return '/' + '/'.join(bits)
+        # path = portal_url + '/' + '/'.join(bits)
+        # return path
 
     def transform(self, blockid, value):
         for field in ["url", "href"]:
@@ -76,6 +83,9 @@ class BlockData(Service):
                 value[field] = self.url_to_path(
                     uid_to_url(value.get(field, ""))
                 )
+        if value.get('chartData', {}).get('provider_url'):
+            value['chartData']['provider_url'] =\
+                self.url_to_path(value['chartData']['provider_url'])
         return value
 
     def publishTraverse(self, request, blockid):

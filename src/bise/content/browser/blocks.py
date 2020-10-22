@@ -3,8 +3,10 @@
 
 
 from .utils import find_block
+from plone import api
 from plone.restapi.interfaces import IBlockFieldDeserializationTransformer
 from plone.restapi.interfaces import IBlockFieldSerializationTransformer
+from plone.restapi.serializer.blocks import uid_to_url
 from urllib.parse import urlparse
 from zope.component import adapter
 from zope.component import subscribers
@@ -26,15 +28,35 @@ class ConnectedPlotlyChartSerializationTransformer(object):
         self.context = context
         self.request = request
 
+    def url_to_path(self, url):
+        # portal_url = api.portal.get().absolute_url()
+        path = urlparse(url).path.replace('/@@download/file', '')
+        bits = list(filter(None, path.split('/')))
+        if bits[0] == 'bise' or bits[0] == 'api':
+            bits = bits[1:]
+        return '/' + '/'.join(bits)
+        # path = portal_url + '/' + '/'.join(bits)
+        # return path
+
+    def transform(self, blockid, value):
+        for field in ["url", "href"]:
+            if field in value.keys():
+                value[field] = self.url_to_path(value.get(field, "")
+                                                )
+        if value.get('chartData', {}).get('provider_url'):
+            value['chartData']['provider_url'] = \
+                self.url_to_path(value['chartData']['provider_url'])
+        return value
+
     def __call__(self, block_value):
         if 'chartData' in block_value['chartData']:     # BBB
             del block_value['chartData']['chartData']
-        print('serialization')
-        print(block_value)
+
         block_value['chartData']['data'] = []
-        if block_value['chartData'].get('provider_url'):
-            url = block_value['chartData']['provider_url']
-            block_value['chartData']['provider_url'] = urlparse(url).path
+
+        block_value = self.transform(None, block_value)
+        # print('serialization')
+        # print(block_value)
         return block_value
 
 
