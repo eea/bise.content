@@ -10,6 +10,7 @@ from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.blocks import uid_to_url
 from plone.restapi.services import Service
+from urllib.parse import urlparse
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.interface import implementer
@@ -66,10 +67,15 @@ class BlockData(Service):
 
     blockid = None
 
+    def url_to_path(self, url):
+        return urlparse(url.replace('@@download/file', '')).path
+
     def transform(self, blockid, value):
         for field in ["url", "href"]:
             if field in value.keys():
-                value[field] = uid_to_url(value.get(field, ""))
+                value[field] = self.url_to_path(
+                    uid_to_url(value.get(field, ""))
+                )
         return value
 
     def publishTraverse(self, request, blockid):

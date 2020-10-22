@@ -19,7 +19,7 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 @implementer(IBlockFieldSerializationTransformer)
 @adapter(Interface, IBrowserRequest)
 class ConnectedPlotlyChartSerializationTransformer(object):
-    order = 100
+    order = 1000
     block_type = 'connected_plotly_chart'
 
     def __init__(self, context, request):
