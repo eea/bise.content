@@ -51,6 +51,7 @@ setup(
         'plone.api>=1.8.4',
         'plone.restapi',
         'plone.app.dexterity',
+        'eea.restapi',
     ],
     extras_require={
         'test': [
