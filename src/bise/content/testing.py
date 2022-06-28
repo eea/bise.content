@@ -20,8 +20,10 @@ class BiseContentLayer(PloneSandboxLayer):
         # layer.
         import plone.restapi
         import eea.restapi
+        import pas.plugins.ldap
         self.loadZCML(package=plone.restapi)
         self.loadZCML(package=eea.restapi)
+        self.loadZCML(package=pas.plugins.ldap)
         self.loadZCML(package=bise.content)
 
     def setUpPloneSite(self, portal):

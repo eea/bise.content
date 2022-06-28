@@ -52,6 +52,7 @@ setup(
         'plone.restapi',
         'plone.app.dexterity',
         'eea.restapi',
+        'pas.plugins.ldap',
     ],
     extras_require={
         'test': [
