@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
+import os
+import unittest
+
 from bise.content.testing import BISE_CONTENT_ACCEPTANCE_TESTING  # noqa: E501
 from plone.app.testing import ROBOT_TEST_LEVEL
 from plone.testing import layered
 
-import os
 import robotsuite
-import unittest
 
 
 def test_suite():

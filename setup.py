@@ -16,6 +16,7 @@ setup(
     name='bise.content',
     version='1.0a1',
     description="Bise Content and Site Policy",
+    long_description_content_type="text/x-rst",
     long_description=long_description,
     # Get more from https://pypi.org/classifiers/
     classifiers=[
@@ -51,6 +52,8 @@ setup(
         'plone.api>=1.8.4',
         'plone.restapi',
         'plone.app.dexterity',
+        'eea.restapi',
+        'pas.plugins.ldap',
     ],
     extras_require={
         'test': [
