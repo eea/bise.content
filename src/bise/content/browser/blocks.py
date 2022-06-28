@@ -1,19 +1,15 @@
 """ block-related utils
 """
 
-
-from .utils import find_block
-from plone import api
+from urllib.parse import urlparse
 from plone.restapi.interfaces import IBlockFieldDeserializationTransformer
 from plone.restapi.interfaces import IBlockFieldSerializationTransformer
-from plone.restapi.serializer.blocks import uid_to_url
-from urllib.parse import urlparse
 from zope.component import adapter
 from zope.component import subscribers
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
-
+from .utils import find_block
 
 # from plone.restapi.behaviors import IBlocks
 
@@ -98,7 +94,7 @@ class ImageCardsSerializationTransformer(object):
         return card
 
     def __call__(self, block_value):
-        if (block_value.get('cards')):
+        if block_value.get('cards'):
             block_value['cards'] = [
                 self.fix_links(card) for card in block_value['cards']
             ]

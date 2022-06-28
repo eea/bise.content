@@ -3,23 +3,22 @@
 """ plone.restapi extensions and endpoints
 """
 
-from .utils import find_block
+import json
+import logging
+
+from urllib.parse import urlparse
 from bise.content.interfaces import IBiseFactsheetDatabase
 from plone import api
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.blocks import uid_to_url
 from plone.restapi.services import Service
-from urllib.parse import urlparse
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
-
-import json
-import logging
-
+from .utils import find_block
 
 # from plone.restapi.services import Service
 # from zope.component import queryMultiAdapter
