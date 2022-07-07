@@ -48,7 +48,9 @@ class ConnectedPlotlyChartSerializationTransformer(object):
             if "chartData" in block_value["chartData"]:  # BBB
                 del block_value["chartData"]["chartData"]
             block_value["visualization"] = {
-                "chartData": block_value["visualization"].get("chartData", None)
+                "chartData": block_value["visualization"].get(
+                    "chartData", None
+                )
                 or block_value.get("chartData", {}),
                 "provider_url": block_value["visualization"].get(
                     "provider_url", None
@@ -65,7 +67,9 @@ class ConnectedPlotlyChartSerializationTransformer(object):
                             newData[traceIndex][originalColumn] = []
                     if not trace.get("transforms"):
                         continue
-                    for transformIndex, _ in enumerate(trace.get("transforms")):
+                    for transformIndex, _ in enumerate(
+                        trace.get("transforms")
+                    ):
                         newData[traceIndex]["transforms"][transformIndex][
                             "target"
                         ] = []
