@@ -9,7 +9,6 @@ from zope.component import subscribers
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
-from .utils import find_block
 
 # from plone.restapi.behaviors import IBlocks
 
