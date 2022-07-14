@@ -50,13 +50,13 @@ class ConnectedPlotlyChartSerializationTransformer(object):
             block_value["visualization"] = {
                 "chartData": block_value["visualization"].get(
                     "chartData", None
-                )
-                or block_value.get("chartData", {}),
+                ) or
+                block_value.get("chartData", {}),
                 "provider_url": block_value["visualization"].get(
                     "provider_url", None
-                )
-                or block_value["chartData"].get("provider_url", None)
-                or block_value["chartData"].get("url", None),
+                ) or
+                block_value["chartData"].get("provider_url", None) or
+                block_value["chartData"].get("url", None),
             }
             if block_value.get("use_live_data", True):
                 newData = block_value["chartData"]["data"]
