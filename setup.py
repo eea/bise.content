@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 """Installer for the bise.content package."""
 
-from setuptools import find_packages
-from setuptools import setup
+from os.path import join
+from setuptools import setup, find_packages
+
+NAME = 'bise.content'
+PATH = ['src'] + NAME.split('.') + ['version.txt']
+VERSION = open(join(*PATH)).read().strip()
 
 
 long_description = '\n\n'.join([
@@ -13,8 +17,8 @@ long_description = '\n\n'.join([
 
 
 setup(
-    name='bise.content',
-    version='1.0a1',
+    name=NAME,
+    version=VERSION,
     description="Bise Content and Site Policy",
     long_description_content_type="text/x-rst",
     long_description=long_description,
@@ -29,10 +33,10 @@ setup(
         "Operating System :: OS Independent",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     ],
-    keywords='Python Plone',
-    author='Tiberiu Ichim',
-    author_email='tiberiu.ichim@eaudeweb.ro',
-    url='https://github.com/collective/bise.content',
+    keywords='Python Plone Bise BiseContent',
+    author='European Environment Agency: IDM2 A-Team',
+    author_email='eea-edw-a-team-alerts@googlegroups.com',
+    url='https://github.com/eea/bise.content',
     project_urls={
         'PyPI': 'https://pypi.python.org/pypi/bise.content',
         'Source': 'https://github.com/collective/bise.content',

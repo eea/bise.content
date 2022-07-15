@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.2 - (2022-07-15)
+---------------------------
+* Change: Fix setup.py
+  [valentinab25]
+
 1.1 - (2022-07-14)
 ---------------------------
 * Change: Make this compatible with latest eea.api.dataconnector
