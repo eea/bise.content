@@ -1,6 +1,9 @@
 Changelog
 =========
 
+1.2-dev0 - (unreleased)
+---------------------------
+
 1.1 - (2022-07-14)
 ---------------------------
 * Change: Make this compatible with latest eea.api.dataconnector
