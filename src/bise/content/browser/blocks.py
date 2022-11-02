@@ -113,7 +113,8 @@ class ImageCardsSerializationTransformer(object):
         self.request = request
 
     def fix_links(self, card):
-        card["attachedimage"] = urlparse(card["attachedimage"]).path
+        if card.get('attachedimage'):
+            card["attachedimage"] = urlparse(card.get("attachedimage")).path
         return card
 
     def __call__(self, block_value):

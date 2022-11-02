@@ -1,0 +1,12 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+  i18n_domain="bise.content"> 
+  <genericsetup:upgradeStep
+    source="1000"
+    destination="1001"
+    title="Convert all CompositePage to Document"
+    handler="bise.content.upgrades.evolve1001.migrate_composite_page"
+    profile="bise.content:default"
+    />
+</configure>
