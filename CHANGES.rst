@@ -1,6 +1,9 @@
 Changelog
 =========
 
+1.4-dev0 - (unreleased)
+---------------------------
+
 1.3 - (2022-10-07)
 ---------------------------
 * Change: Upgrade step: convert all CompositePage to Document
