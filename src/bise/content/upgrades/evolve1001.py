@@ -1,6 +1,5 @@
 """ Upgrade to version 1001
 """
-# pylint: disable=line-too-long
 from Products.CMFCore.utils import getToolByName
 
 
