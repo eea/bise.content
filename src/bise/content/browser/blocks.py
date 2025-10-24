@@ -1,5 +1,5 @@
-""" block-related utils
-"""
+"""block-related utils"""
+
 import re
 from urllib.parse import urlparse
 from plone.restapi.interfaces import IBlockFieldDeserializationTransformer
@@ -47,15 +47,11 @@ class ConnectedPlotlyChartSerializationTransformer(object):
             if "chartData" in block_value["chartData"]:  # BBB
                 del block_value["chartData"]["chartData"]
             block_value["visualization"] = {
-                "chartData": block_value["visualization"].get(
-                    "chartData", None
-                ) or
-                block_value.get("chartData", {}),
-                "provider_url": block_value["visualization"].get(
-                    "provider_url", None
-                ) or
-                block_value["chartData"].get("provider_url", None) or
-                block_value["chartData"].get("url", None),
+                "chartData": block_value["visualization"].get("chartData", None)
+                or block_value.get("chartData", {}),
+                "provider_url": block_value["visualization"].get("provider_url", None)
+                or block_value["chartData"].get("provider_url", None)
+                or block_value["chartData"].get("url", None),
             }
             if block_value.get("use_live_data", True):
                 newData = block_value["chartData"]["data"]
@@ -66,12 +62,8 @@ class ConnectedPlotlyChartSerializationTransformer(object):
                             newData[traceIndex][originalColumn] = []
                     if not trace.get("transforms"):
                         continue
-                    for transformIndex, _ in enumerate(
-                        trace.get("transforms")
-                    ):
-                        newData[traceIndex]["transforms"][transformIndex][
-                            "target"
-                        ] = []
+                    for transformIndex, _ in enumerate(trace.get("transforms")):
+                        newData[traceIndex]["transforms"][transformIndex]["target"] = []
                 block_value["visualization"]["chartData"]["data"] = newData
             del block_value["chartData"]
 
@@ -113,7 +105,7 @@ class ImageCardsSerializationTransformer(object):
         self.request = request
 
     def fix_links(self, card):
-        if card.get('attachedimage'):
+        if card.get("attachedimage"):
             card["attachedimage"] = urlparse(card.get("attachedimage")).path
         return card
 

@@ -10,5 +10,4 @@ class IBiseContentLayer(IDefaultBrowserLayer):
 
 
 class IBiseFactsheetDatabase(Interface):
-    """ A marker interface for content serving as factsheets "database"
-    """
+    """A marker interface for content serving as factsheets "database" """
