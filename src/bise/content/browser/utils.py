@@ -5,18 +5,17 @@ def _subforms(value):
     if not value:
         return []
 
-    if 'data' in value:
-        return _subforms(value['data'])
+    if "data" in value:
+        return _subforms(value["data"])
 
-    if 'blocks' in value:
-        return value['blocks'].items()
+    if "blocks" in value:
+        return value["blocks"].items()
 
     return []
 
 
 def find_block(blocks, searchid):
-    """ Crawls tree of blocks (with columns, subblocks) to find a block
-    """
+    """Crawls tree of blocks (with columns, subblocks) to find a block"""
     if searchid in blocks:
         return blocks[searchid]
 
