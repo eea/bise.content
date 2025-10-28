@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.4 - (2025-10-28)
+---------------------------
+* Change: Develop
+  [laszlocseh]
+
 1.3 - (2022-10-07)
 ---------------------------
 * Change: Upgrade step: convert all CompositePage to Document
