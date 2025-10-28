@@ -3,6 +3,8 @@ Changelog
 
 1.5-dev0 - (unreleased)
 ---------------------------
+* Change: Replace Python linting to ruff
+  [mihaidobrescu1111 = refs #286821]
 
 1.4 - (2025-10-28)
 ---------------------------

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-""" plone.restapi extensions and endpoints
-"""
+"""plone.restapi extensions and endpoints"""
 
 import json
 import logging
@@ -23,7 +22,7 @@ from .utils import find_block
 # from plone.restapi.services import Service
 # from zope.component import queryMultiAdapter
 
-logger = logging.getLogger('bise.content')
+logger = logging.getLogger("bise.content")
 
 
 @implementer(IExpandableElement)
@@ -36,15 +35,14 @@ class FactsheetDatabaseListing(object):
     def __call__(self, expand=False):
         # we ignore expand here, because of specific interface
         result = {}
-        batch = api.content.find(context=self.context,
-                                 portal_type="bise_factsheet_section",
-                                 sort_on="getObjPositionInParent",
-                                 sort_order="ascending",
-                                 )
+        batch = api.content.find(
+            context=self.context,
+            portal_type="bise_factsheet_section",
+            sort_on="getObjPositionInParent",
+            sort_order="ascending",
+        )
         items = [
-            getMultiAdapter((brain.getObject(), self.request),
-                            ISerializeToJson)()
-
+            getMultiAdapter((brain.getObject(), self.request), ISerializeToJson)()
             for brain in batch
         ]
 
@@ -68,23 +66,22 @@ class BlockData(Service):
 
     def url_to_path(self, url):
         # portal_url = api.portal.get().absolute_url()
-        path = urlparse(url).path.replace('/@@download/file', '')
-        bits = list(filter(None, path.split('/')))
-        if bits[0] == 'bise' or bits[0] == 'api':
+        path = urlparse(url).path.replace("/@@download/file", "")
+        bits = list(filter(None, path.split("/")))
+        if bits[0] == "bise" or bits[0] == "api":
             bits = bits[1:]
-        return '/' + '/'.join(bits)
+        return "/" + "/".join(bits)
         # path = portal_url + '/' + '/'.join(bits)
         # return path
 
     def transform(self, blockid, value):
         for field in ["url", "href"]:
             if field in value.keys():
-                value[field] = self.url_to_path(
-                    uid_to_url(value.get(field, ""))
-                )
-        if value.get('chartData', {}).get('provider_url'):
-            value['chartData']['provider_url'] =\
-                self.url_to_path(value['chartData']['provider_url'])
+                value[field] = self.url_to_path(uid_to_url(value.get(field, "")))
+        if value.get("chartData", {}).get("provider_url"):
+            value["chartData"]["provider_url"] = self.url_to_path(
+                value["chartData"]["provider_url"]
+            )
         return value
 
     def publishTraverse(self, request, blockid):
@@ -101,16 +98,17 @@ class BlockData(Service):
             try:
                 blocks = json.loads(blocks)
             except:
-                logger.exception("Invalid json in blocks %s",
-                                 self.context.absolute_url())
+                logger.exception(
+                    "Invalid json in blocks %s", self.context.absolute_url()
+                )
                 blocks = {}
 
         return {
-            '@id': '{}/@blocks'.format(self.context.absolute_url()),
-            'items': [
+            "@id": "{}/@blocks".format(self.context.absolute_url()),
+            "items": [
                 [blockid, self.transform(blockid, blocks[blockid])]
                 for blockid in (self.context.blocks_layout.items or [])
-            ]
+            ],
         }
 
     def reply_block(self):
@@ -119,14 +117,14 @@ class BlockData(Service):
             try:
                 blocks = json.loads(blocks)
             except:
-                logger.exception("Invalid json in blocks %s",
-                                 self.context.absolute_url())
+                logger.exception(
+                    "Invalid json in blocks %s", self.context.absolute_url()
+                )
                 blocks = {}
 
         data = find_block(blocks, self.blockid) or {}
 
         return {
-            '@id': '{}/@blocks/{}'.format(self.context.absolute_url(),
-                                          self.blockid),
-            'data': self.transform(self.blockid, data)
+            "@id": "{}/@blocks/{}".format(self.context.absolute_url(), self.blockid),
+            "data": self.transform(self.blockid, data),
         }

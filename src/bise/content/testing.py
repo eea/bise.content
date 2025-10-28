@@ -11,7 +11,6 @@ import bise.content
 
 
 class BiseContentLayer(PloneSandboxLayer):
-
     defaultBases = (PLONE_APP_CONTENTTYPES_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
@@ -21,13 +20,14 @@ class BiseContentLayer(PloneSandboxLayer):
         import plone.restapi
         import eea.restapi
         import pas.plugins.ldap
+
         self.loadZCML(package=plone.restapi)
         self.loadZCML(package=eea.restapi)
         self.loadZCML(package=pas.plugins.ldap)
         self.loadZCML(package=bise.content)
 
     def setUpPloneSite(self, portal):
-        applyProfile(portal, 'bise.content:default')
+        applyProfile(portal, "bise.content:default")
 
 
 BISE_CONTENT_FIXTURE = BiseContentLayer()
@@ -35,13 +35,13 @@ BISE_CONTENT_FIXTURE = BiseContentLayer()
 
 BISE_CONTENT_INTEGRATION_TESTING = IntegrationTesting(
     bases=(BISE_CONTENT_FIXTURE,),
-    name='BiseContentLayer:IntegrationTesting',
+    name="BiseContentLayer:IntegrationTesting",
 )
 
 
 BISE_CONTENT_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(BISE_CONTENT_FIXTURE,),
-    name='BiseContentLayer:FunctionalTesting',
+    name="BiseContentLayer:FunctionalTesting",
 )
 
 
@@ -51,5 +51,5 @@ BISE_CONTENT_ACCEPTANCE_TESTING = FunctionalTesting(
         REMOTE_LIBRARY_BUNDLE_FIXTURE,
         z2.ZSERVER_FIXTURE,
     ),
-    name='BiseContentLayer:AcceptanceTesting',
+    name="BiseContentLayer:AcceptanceTesting",
 )
