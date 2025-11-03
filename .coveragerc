@@ -1,6 +1,6 @@
 [report]
 include =
-    src/bise/*
+    bise/*
 omit =
     */test*
     */upgrades/*

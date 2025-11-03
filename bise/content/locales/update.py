@@ -8,7 +8,7 @@ import pkg_resources
 domain = "bise.content"
 os.chdir(pkg_resources.resource_filename(domain, ""))
 os.chdir("../../../")
-target_path = "src/bise/content/"
+target_path = "bise/content/"
 locale_path = target_path + "locales/"
 i18ndude = "./bin/i18ndude"
 

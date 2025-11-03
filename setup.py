@@ -5,7 +5,7 @@ from os.path import join
 from setuptools import setup, find_packages
 
 NAME = "bise.content"
-PATH = ["src"] + NAME.split(".") + ["version.txt"]
+PATH = NAME.split(".") + ["version.txt"]
 VERSION = open(join(*PATH)).read().strip()
 
 
@@ -46,9 +46,9 @@ setup(
         # 'Documentation': 'https://bise.content.readthedocs.io/en/latest/',
     },
     license="GPL version 2",
-    packages=find_packages("src", exclude=["ez_setup"]),
+    packages=find_packages(".", exclude=["ez_setup"]),
     namespace_packages=["bise"],
-    package_dir={"": "src"},
+    package_dir={"": "."},
     include_package_data=True,
     zip_safe=False,
     install_requires=[

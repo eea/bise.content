@@ -10,11 +10,11 @@
 #
 # 1) Start robot server:
 #
-# $ bin/robot-server --reload-path src bise.content.testing.BISE_CONTENT_ACCEPTANCE_TESTING
+# $ bin/robot-server --reload-path . bise.content.testing.BISE_CONTENT_ACCEPTANCE_TESTING
 #
 # 2) Run robot tests:
 #
-# $ bin/robot src/bise/content/tests/robot/test_example.robot
+# $ bin/robot bise/content/tests/robot/test_example.robot
 #
 # See the http://docs.plone.org for further details (search for robot
 # framework).
