@@ -47,6 +47,13 @@
       menu="plone_displayviews"
       />
 
+  <browser:page
+    name="case-studies-map.arcgis.json"
+    for="*"
+    class=".casestudies_map.Items"
+    permission="zope2.View"
+    />
+
   <plone:service
     method="GET"
     for="*"
