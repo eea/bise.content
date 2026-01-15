@@ -2,7 +2,6 @@
 
 import json
 import logging
-import lxml
 
 from plone.api.portal import get_tool
 from Products.Five import BrowserView
