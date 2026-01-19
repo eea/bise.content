@@ -44,7 +44,7 @@ class Items(BrowserView):
         )
         for brain in brains:
             obj = brain.getObject()
-            if not hasattr(obj, "geolocation") and obj.geolocation is not None:
+            if getattr(obj, "geolocation", None) is None:
                 continue
 
             results["features"].append(
