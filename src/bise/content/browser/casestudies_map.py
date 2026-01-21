@@ -42,21 +42,34 @@ class Items(BrowserView):
                 # "review_state": "published",
             }
         )
+
         for brain in brains:
             obj = brain.getObject()
             if getattr(obj, "geolocation", None) is None:
                 continue
+
+            measures = []
+
+            if obj.nrr_measures_implemented:
+                measures = [
+                    {"id": measure.to_id,
+                     "title": measure.to_object.title,
+                     "path": measure.to_path.replace("/Plone", "")}
+                    for measure in obj.measures
+                ]
 
             results["features"].append(
                 {
                     "properties": {
                         "portal_type": obj.portal_type,
                         "title": obj.title,
-                        "description": 'long_description',
+                        "description": obj.description,
                         "url": brain.getURL(),
                         "path": "/".join(
                             obj.getPhysicalPath()).replace('/Plone', ''),
                         "image": "",
+                        "measures": measures,
+                        "typology_of_measures": obj.nrr_typology_of_measures,
                     },
                     "geometry": {
                         "type": "Point",
