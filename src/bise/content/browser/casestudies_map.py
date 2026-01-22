@@ -55,7 +55,7 @@ class Items(BrowserView):
                     {"id": measure.to_id,
                      "title": measure.to_object.title,
                      "path": measure.to_path.replace("/Plone", "")}
-                    for measure in obj.measures
+                    for measure in obj.nrr_measures_implemented
                 ]
 
             results["features"].append(
