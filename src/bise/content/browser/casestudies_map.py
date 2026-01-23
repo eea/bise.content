@@ -58,6 +58,14 @@ class Items(BrowserView):
                     for measure in obj.nrr_measures_implemented
                 ]
 
+            typology_of_measures = []
+
+            if obj.nrr_typology_of_measures:
+                typology_of_measures = [
+                    tom.title
+                    for tom in obj.nrr_typology_of_measures
+                ]
+
             results["features"].append(
                 {
                     "properties": {
@@ -69,7 +77,7 @@ class Items(BrowserView):
                             obj.getPhysicalPath()).replace('/Plone', ''),
                         "image": "",
                         "measures": measures,
-                        "typology_of_measures": obj.nrr_typology_of_measures,
+                        "typology_of_measures": typology_of_measures,
                     },
                     "geometry": {
                         "type": "Point",
