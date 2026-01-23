@@ -62,7 +62,7 @@ class Items(BrowserView):
 
             if obj.nrr_typology_of_measures:
                 typology_of_measures = [
-                    tom.title
+                    str(tom)
                     for tom in obj.nrr_typology_of_measures
                 ]
 
