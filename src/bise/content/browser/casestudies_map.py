@@ -78,6 +78,14 @@ class Items(BrowserView):
                         "image": "",
                         "measures": measures,
                         "typology_of_measures": typology_of_measures,
+                        "current_status": obj.nrr_current_status,
+                        "habitat_ecosystem_type": list(
+                            obj.nrr_habitat_ecosystem_type or []
+                        ),
+                        "nrr_article": list(obj.nrr_article or []),
+                        "scale_of_planning": list(
+                            obj.nrr_scale_of_planning or []
+                        ),
                     },
                     "geometry": {
                         "type": "Point",
