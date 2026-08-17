@@ -54,7 +54,7 @@ class Items(BrowserView):
                 measures = [
                     {"id": measure.to_id,
                      "title": measure.to_object.title,
-                     "path": measure.to_path.replace("/Plone", "")}
+                     "path": measure.to_path.replace("/bise", "")}
                     for measure in obj.nrr_measures_implemented
                 ]
 
@@ -74,7 +74,7 @@ class Items(BrowserView):
                         "description": obj.description,
                         "url": brain.getURL(),
                         "path": "/".join(
-                            obj.getPhysicalPath()).replace('/Plone', ''),
+                            obj.getPhysicalPath()).replace('/bise', ''),
                         "image": "",
                         "measures": measures,
                         "typology_of_measures": typology_of_measures,
