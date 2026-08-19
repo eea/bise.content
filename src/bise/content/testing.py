@@ -19,10 +19,8 @@ class BiseContentLayer(PloneSandboxLayer):
         # The z3c.autoinclude feature is disabled in the Plone fixture base
         # layer.
         import plone.restapi
-        import eea.restapi
         import pas.plugins.ldap
         self.loadZCML(package=plone.restapi)
-        self.loadZCML(package=eea.restapi)
         self.loadZCML(package=pas.plugins.ldap)
         self.loadZCML(package=bise.content)
 
