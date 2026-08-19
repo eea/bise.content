@@ -2,7 +2,6 @@
 <metadata>
   <version>1001</version>
   <dependencies>
-    <dependency>profile-eea.restapi:default</dependency>
     <dependency>profile-pas.plugins.ldap.plonecontrolpanel:default</dependency>
   </dependencies>
 </metadata>
