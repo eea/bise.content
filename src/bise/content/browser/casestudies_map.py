@@ -82,7 +82,9 @@ class Items(BrowserView):
                         "habitat_ecosystem_type": list(
                             obj.nrr_habitat_ecosystem_type or []
                         ),
-                        "nrr_article": list(obj.nrr_article or []),
+                        "nrr_legislation": list(obj.nrr_legislation or []),
+                        "nrr_biogeographical_region": list(
+                            obj.nrr_biogeographical_region or []),
                         "scale_of_planning": list(
                             obj.nrr_scale_of_planning or []
                         ),
