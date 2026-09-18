@@ -13,6 +13,23 @@ from Products.Five import BrowserView
 logger = logging.getLogger("bise.content")
 
 
+def get_preview_image_url(obj, scale="preview"):
+    """Return an absolute URL for the object's preview image.
+
+    Falls back to the unscaled image when the requested scale is not
+    available (for example when the original is smaller than the scale).
+    """
+    if not getattr(obj, "preview_image", None):
+        return ""
+
+    images = obj.restrictedTraverse("@@images")
+    image_scale = images.scale("preview_image", scale=scale)
+    if image_scale is not None:
+        return image_scale.absolute_url()
+
+    return "{}/@@images/preview_image".format(obj.absolute_url())
+
+
 class Items(BrowserView):
     """ Items"""
 
@@ -75,7 +92,7 @@ class Items(BrowserView):
                         "url": brain.getURL(),
                         "path": "/".join(
                             obj.getPhysicalPath()).replace('/bise', ''),
-                        "image": "",
+                        "image": get_preview_image_url(obj),
                         "measures": measures,
                         "typology_of_measures": typology_of_measures,
                         "current_status": obj.nrr_current_status,
