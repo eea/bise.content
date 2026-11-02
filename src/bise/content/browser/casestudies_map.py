@@ -2,6 +2,7 @@
 
 import json
 import logging
+import re
 
 from plone.api.portal import get_tool
 from Products.Five import BrowserView
@@ -11,6 +12,46 @@ from Products.Five import BrowserView
 # from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 logger = logging.getLogger("bise.content")
+
+# Typology choices are stored as "NRPM_001 - MA01 - <measure name>".
+TYPOLOGY_LABEL_RE = re.compile(r"^([A-Za-z]+)")
+
+
+def parse_typology_entry(value):
+    """Split a typology choice label into its structured parts.
+
+    Choices are stored as "NRPM_001 - MA01 - Prevent conversion of ...".
+    Returns the NRPM code, the measure family (the MA/MB/... prefix) and
+    the measure name. Labels that don't follow the pattern are returned
+    whole, as their own title, with an empty family.
+    """
+    label = str(value).strip()
+    parts = [part.strip() for part in label.split(" - ", 2)]
+
+    if len(parts) < 2 or not (parts[0] and parts[1]):
+        return {"code": label, "family": "", "title": label}
+
+    code, measure_code = parts[0], parts[1]
+    title = parts[2] if len(parts) == 3 and parts[2] else label
+    family = TYPOLOGY_LABEL_RE.match(measure_code)
+
+    return {
+        "code": code,
+        "family": family.group(1) if family else "",
+        "title": title,
+    }
+
+
+def get_effective_date(obj):
+    """Return the publication date as ISO 8601, falling back to creation."""
+    date = getattr(obj, "effective_date", None) or getattr(obj, "created", None)
+
+    if date is None:
+        return None
+
+    isoformat = getattr(date, "ISO8601", None)
+
+    return isoformat() if isoformat is not None else date.isoformat()
 
 
 def get_preview_image_url(obj, scale="preview"):
@@ -76,11 +117,16 @@ class Items(BrowserView):
                 ]
 
             typology_of_measures = []
+            typology = []
 
             if obj.nrr_typology_of_measures:
                 typology_of_measures = [
                     str(tom)
                     for tom in obj.nrr_typology_of_measures
+                ]
+                typology = [
+                    parse_typology_entry(tom)
+                    for tom in typology_of_measures
                 ]
 
             results["features"].append(
@@ -95,6 +141,8 @@ class Items(BrowserView):
                         "image": get_preview_image_url(obj),
                         "measures": measures,
                         "typology_of_measures": typology_of_measures,
+                        "typology": typology,
+                        "effective": get_effective_date(obj),
                         "current_status": obj.nrr_current_status,
                         "habitat_ecosystem_type": list(
                             obj.nrr_habitat_ecosystem_type or []
