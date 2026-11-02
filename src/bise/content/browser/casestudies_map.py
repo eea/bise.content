@@ -44,7 +44,8 @@ def parse_typology_entry(value):
 
 def get_effective_date(obj):
     """Return the publication date as ISO 8601, falling back to creation."""
-    date = getattr(obj, "effective_date", None) or getattr(obj, "created", None)
+    date = (getattr(obj, "effective_date", None)
+            or getattr(obj, "created", None))
 
     if date is None:
         return None
