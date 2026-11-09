@@ -43,9 +43,20 @@ def parse_typology_entry(value):
 
 
 def get_effective_date(obj):
-    """Return the publication date as ISO 8601, falling back to creation."""
-    date = (getattr(obj, "effective_date", None) or
-            getattr(obj, "created", None))
+    """Return the publication date as ISO 8601, falling back to creation.
+
+    Unpublished content usually has no effective date yet, so the creation
+    date is used instead. Note that ``created`` is a method on CMF objects
+    (it returns a DateTime), hence the callable handling.
+    """
+    date = getattr(obj, "effective_date", None)
+    if callable(date):
+        date = date()
+
+    if date is None:
+        date = getattr(obj, "created", None)
+        if callable(date):
+            date = date()
 
     if date is None:
         return None
